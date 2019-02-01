@@ -104,5 +104,5 @@ venv.bak/
 .mypy_cache/
 
 #latex
-rapport/*
-!rapport/rapport.pdf
+rapport_ter/*
+!rapport_ter/rapport_ter.pdf
