@@ -1,40 +1,44 @@
 from matplotlib import pyplot as plt
 from numpy import *
 
-pos_ini = array([5])
+def particule_anime(dt, N, L, nb_particules):
+	pos_ini = zeros(nb_particules)
+	for i in range(nb_particules):
+		pos_ini[i] = random.randint(0,L)
 
-vit_ini = array([0.1])
+	vit_ini = zeros(nb_particules)
+	for i in range(nb_particules):
+		vit_ini[i] = random.uniform(0.1,1)
 
-def particule_anime(dt, N):
-    length = (int)(math.floor(N/dt))
-    pos_old = pos_ini
-    vit_old = vit_ini
-    x = zeros(length)
-    y = zeros(length)
+	length = (int)(math.floor(N/dt))
+	pos_old = pos_ini
+	vit_old = vit_ini
+	
+	x = zeros((length, nb_particules))
+	x[0] = array([pos_ini[0] for _ in range(nb_particules)])
+    
+	fig = plt.figure('particule_1D')
+	ax = fig.add_subplot(111)
+	ax.set_xlim([-3.,L+3])
+	ax.set_ylim([-2.,2.])
 
-    x[0] = array([pos_ini[0]])
-    y[0] = array([0])
+	t = linspace(0,L,length)
+	zeros_tab = zeros(length)
+	plt.plot(t,zeros_tab,'-', color='blue')
     
-    fig = plt.figure('particule_1D')
-    ax = fig.add_subplot(111)
-    ax.set_xlim([-10.,100.])
-    ax.set_ylim([-5.,5.])
+	pts = []
     
-    pts = []
-    
-    for i in range(1):
-        pts += ax.plot([], [], marker="o",color='blue')
+	for i in range(nb_particules):
+		pts += ax.plot([], [], marker="o",color='red')
         
-    for n in range(1, length):
-        pos_next = pos_old + dt * vit_old
+	for n in range(1, length):
+		pos_next = (pos_old + dt * vit_old) % L
+		x[n] = array([pos_next[i] for i in range(nb_particules)])
+		pos_old = pos_next
         
-        x[n] = array([pos_next[0]])
-        
-        pos_old = pos_next
-        
-        for pt,i in zip(pts,range(6)):
-            pt.set_data(x[n],0)
+		for pt,i in zip(pts,range(nb_particules)):
+			pt.set_data(x[n,i],0)
             
-        plt.pause(0.00001)
-    
-particule_anime(1,100)
+		plt.pause(0.001)
+
+particule_anime(1,1000,100,10)
