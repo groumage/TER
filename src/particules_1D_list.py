@@ -2,13 +2,13 @@ from matplotlib import pyplot as plt
 from numpy import *
 
 def particule_anime(dt, N, L, nb_particules):
-	pos = zeros(nb_particules)
+	pos = []
 	for i in range(nb_particules):
-		pos[i] = random.randint(0,L)
+		pos.append(random.randint(0,L))
 
-	vit = zeros(nb_particules)
+	vit = []
 	for i in range(nb_particules):
-		vit[i] = random.uniform(0.1,1)
+		vit.append(random.uniform(0.1,1))
 
 	length = (int)(math.floor(N/dt))
 
@@ -27,11 +27,9 @@ def particule_anime(dt, N, L, nb_particules):
 		pts += ax.plot([], [], marker="o",color='red')
         
 	for n in range(1, length):
-		pos = (pos + dt * vit) % L
 		for pt,i in zip(pts,range(nb_particules)):
+			pos[i] = (pos[i] + dt * vit[i]) % L
 			pt.set_data(pos[i],0)
-			#pos_old[i] = (pos_old[i] + dt * vit_old[i]) % L
-		#pos_old = pos_next
 
 		plt.pause(0.001)
 
