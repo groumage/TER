@@ -7,8 +7,14 @@
 \begin{document}
 \maketitle
 \newpage
-\noindent Dans tout le document, les problèmes seront étudiés sur un intervalle de temps noté $[0;T]$, avec $T \in ]0; + \infty[$. Pour discrétiser le problème et faire des simulations numériques, on choisit un nombre de pas $N$. Le pas de temps, représenté par $h$, est alors donné par la formule : $h = \frac{T}{N}$.
+\noindent Dans tout le document, les problèmes seront étudiés sur un intervalle de temps noté $[0;T]$, avec $T \in ]0; + \infty[$. Pour discrétiser le problème et faire des simulations numériques, on choisit un nombre de pas $N$. L'intervalle $[0;T]$ est subdivisé en $N$ sous-intervalles. Le pas de temps, représenté par $h$, est alors donné par la formule : $h = \frac{T}{N}$.
 \newpage
+\section*{Introduction}
+Il est courant de dire que la matière possède trois états : l'état solide, l'état liquide, ainsi que l'état gazeux. Mais en réalité, il existe un quatrième état de la matière : c'est le plasma.\\
+Comme nous le savons, les atomes sont composés d'un noyau, contenant des protons et des neutrons, autour duquel gravitent des électrons. A l'état solide, liquide ou gazeux, les électrons qui orbitent autour des atomes restent sur leurs orbites. Lorsque de la matière est chauffé, elle passe successivement de l'état solide à l'état liquide, puis de l'état liquide à l'état gazeux. Lorsque le gaz est chauffé à très haute température (supérieure à $10^4$ K), il devient un plasma.\\
+Cette haute température libèrent les électrons de l'orbite de l'atome auquel ils étaient rattaché, qui peuvent désormais se déplacer dans le gaz.\\
+\\
+L'analyse numérique permet de reproduire par le calcul une réalité physique. Cette simulation peut être effectuée pour plusieurs raisons : l'expérience peut-être irréalisable, avoir un coût trop élevé, ou encore pour prévoir grâce aux ordinateurs comment l'expérience va se dérouler, avant de faire cette même expérience en laboratoire.
 \section*{Vlasov}
 \subsection*{Mouvement de particules en 1D}
 Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons.\\
