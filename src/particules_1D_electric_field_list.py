@@ -1,26 +1,28 @@
 from matplotlib import pyplot as plt
 from numpy import *
 
-q = 1.6021766208e-19
+q = -1.6021766208e-19
+qe = -q
 me = 9.109e-31
 
 #fct p-periodique : sin((2*pi/p)*x)
+# il ne faut pas que la valeur soit 0 sinon la vitesse est nulle ==> la particule ne bouge plus
 def electric_field(x, L):
-	return 0.1*sin((2*pi/L)*x)
+	return (sin(pi/L*x)+0.1)*(-me/qe)
 
-def particule_anime(dt, N, L, nb_particules):
-	pos = []
+def particule_anime_euler_explicite(dt, N, L, nb_particules):
+	pos_old = []
 	for i in range(nb_particules):
-		pos.append(random.randint(0,L))
+		pos_old.append(random.randint(0,L))
 
-	vit = []
+	vit_old = []
 	for i in range(nb_particules):
-		vit.append(random.uniform(0.1,1))
+		vit_old.append(random.uniform(0.1,1))
 
 	length = (int)(math.floor(N/dt))
 
-	pos_ini = pos
-	vit_ini = vit
+	pos_ini = pos_old
+	vit_ini = vit_old
 
 	fig = plt.figure('particule_1D')
 	ax = fig.add_subplot(111)
@@ -38,9 +40,12 @@ def particule_anime(dt, N, L, nb_particules):
         
 	for n in range(1, length):
 		for pt,i in zip(pts,range(nb_particules)):
-			pos[i] = (pos[i] + dt * vit[i]) % L
-			pt.set_data(pos[i],0)
-
+			pt.set_data(pos_old[i],0)
+			pos_next = (pos_old[i] + dt * vit_old[i]) % L
+			vit_next = (-qe/me)*electric_field(pos_old[i],L)
+			pos_old[i] = pos_next
+			vit_old[i] = vit_next
+			
 		plt.pause(0.001)
 
-particule_anime(1,1000,100,1)
+particule_anime_euler_explicite(1,1000,100,1)

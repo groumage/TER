@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\title{Simulation Numérique de l'amortissement Landau dans les plasmas}
+\date{2019}
+\author{Yassine MOUFTAH\\Guillaume ROUMAGE}
+\begin{document}
+\maketitle
+\newpage
+\noindent Dans tout le document, les problèmes seront étudiés sur un intervalle de temps noté $[0;T]$, avec $T \in ]0; + \infty[$. Pour discrétiser le problème et faire des simulations numériques, on choisit un nombre de pas $N$. Le pas de temps, représenté par $h$, est alors donné par la formule : $h = \frac{T}{N}$.
+\newpage
+\section*{Vlasov}
+\subsection*{Mouvement de particules en 1D}
+Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons.\\
+Les équations donnant la position et la vitesse des électrons sont données par les systèmes suivants. Tout d'abord, en faisant l'hypothèse que le champs électrique auquel est soumis l'électron est nul.
+$$
+\left \{
+   \begin{array}{l l l}
+      x'(t)  & = & v(t) \\
+      v'(t)  & = & 0 \\
+	\end{array}
+\right.
+$$
+avec $t \in [0;T]$.\\
+En discrétisant, cela se réécrit :
+$$
+\left \{
+   \begin{array}{l l l}
+      x_{n+1}  & = & x_n + h.v_n \\
+      v_{n+1}  & = & v_n \\
+	\end{array}
+\right.
+$$
+avec $n \in \{0,...,N-1\}$.\\
+Ajoutons maintenant un champ électrique. Les équations décrivant la position et la vitesse des électrons sont données par :
+$$
+\left \{
+   \begin{array}{l l l}
+      x'(t)  & = & v(t) \\
+      v'(t)  & = & -\frac{m}{q}.E_0(x(t)) \\
+	\end{array}
+\right.
+$$
+avec $t \in [0;T]$, $m$ la masse d'un électron, $q$ la valeur de la charge élémentaire de l'électron, $E_0$ la fonction représentant la valeur du champ électrique en fonction de la vitesse.\\
+Soit en discrétisant :
+$$
+\left \{
+   \begin{array}{l l l}
+      x_{n+1}  & = & x_n + h.v_n \\
+      v_{n+1}  & = & -\frac{m}{q}.E_0(x_n) \\
+	\end{array}
+\right.
+$$
+\end{document}

@@ -106,3 +106,4 @@ venv.bak/
 #latex
 rapport_ter/*
 !rapport_ter/rapport_ter.pdf
+!rapport_ter/rapport_ter.tex
