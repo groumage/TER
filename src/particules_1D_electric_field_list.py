@@ -6,9 +6,11 @@ qe = -q
 me = 9.109e-31
 
 #fct p-periodique : sin((2*pi/p)*x)
-# il ne faut pas que la valeur soit 0 sinon la vitesse est nulle ==> la particule ne bouge plus
+#il ne faut pas que la valeur soit 0 sinon la vitesse est nulle ==> la particule ne bouge plus
+# fonction degre 2 : f(x) = ax^2 + bx + c = a(x-x1)(x-x2)
 def electric_field(x, L):
-	return (sin(pi/L*x)+0.1)*(-me/qe)
+	#return (sin(pi/L*x)+0.1)*(-me/qe)
+	return ((-pow(10,-3)*x*(x-L)) + 0.1) * (-me/qe)
 
 def particule_anime_euler_explicite(dt, N, L, nb_particules):
 	pos_old = []
