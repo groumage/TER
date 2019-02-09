@@ -1,6 +1,9 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{comment}
 \title{Simulation Numérique de l'amortissement Landau dans les plasmas}
 \date{2019}
 \author{Yassine MOUFTAH\\Guillaume ROUMAGE}
@@ -12,17 +15,19 @@
 \section*{Introduction}
 Il est courant de dire que la matière possède trois états : l'état solide, l'état liquide, ainsi que l'état gazeux. Mais en réalité, il existe un quatrième état de la matière : c'est le plasma.\\
 Comme nous le savons, les atomes sont composés d'un noyau, contenant des protons et des neutrons, autour duquel gravitent des électrons. A l'état solide, liquide ou gazeux, les électrons qui orbitent autour des atomes restent sur leurs orbites. Lorsque de la matière est chauffé, elle passe successivement de l'état solide à l'état liquide, puis de l'état liquide à l'état gazeux. Lorsque le gaz est chauffé à très haute température (supérieure à $10^4$ K), il devient un plasma.\\
-Cette haute température libèrent les électrons des l'orbites de l'atome auquel ils étaient rattaché, qui peuvent désormais se déplacer dans le gaz.\\
+Cette haute température libèrent les électrons des l'orbites de l'atome auquel ils étaient rattaché, qui peuvent désormais se déplacer dans le gaz. Celui-ci devient alors un mélange d'électrons et d'ions positifs.\\
 \\
 L'analyse numérique permet de reproduire par le calcul une réalité physique. Cette simulation peut être effectuée pour plusieurs raisons : l'expérience peut-être irréalisable, avoir un coût trop élevé, ou encore pour prévoir grâce aux ordinateurs comment l'expérience va se dérouler, avant de faire cette même expérience en laboratoire, en conditions réelles.
-\subsection*{Constante}
+\subsection*{Constantes}
 \begin{itemize}
-\item Charge élémentaire d'un électron : $q_e = -1.6021766208.10^{-19} C$.
+\item Valeur d'une charge élémentaire : $e = 1.6021766208.10^{-19} C$.
+\item Charge élémentaire d'un électron : $q_e = -e = -1.6021766208.10^{-19} C$.
 \item Masse d'un électron : $m_e = 9.109.10^{-31} kg$.
 \end{itemize}
-\section*{Vlasov}
+\section*{Simulation de mouvements de particules}
 \subsection*{Mouvement de particules en 1D}
-Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons.\\
+Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Lors de la simulationn, si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons. En effet, les mouvements des ions sont négligeables devant ceux des électrons. Nous considérerons donc les ions comme fixes.
+\subsubsection*{Avec un champs électrique nul}
 Les équations donnant la position et la vitesse des électrons sont données par les systèmes suivants. Tout d'abord, en faisant l'hypothèse que le champs électrique auquel est soumis l'électron est nul.
 $$
 \left \{
@@ -43,6 +48,7 @@ $$
 \right.
 $$
 avec $n \in \{0,...,N-1\}$.\\
+\subsubsection*{Avec un champs électrique constant}
 Ajoutons maintenant un champ électrique constant. Les équations décrivant la position et la vitesse des électrons sont données par :
 $$
 \left \{
@@ -53,7 +59,7 @@ $$
 \right.
 $$
 avec $t \in [0;T]$, $m_e$ la masse d'un électron, $q_e$ la valeur de la charge élémentaire de l'électron, $E_0$ la fonction représentant la valeur du champ électrique en fonction de la position.\\
-Dans la simulation, la fonction $E_0$ utilisée est $E_0 : t \mapsto (-10^{-3}.t.(t-L) + 0.1) \times \frac{-m_e}{q_e}$.\\
+Dans la simulation, la fonction $E_0$ utilisée est $E_0 : x \mapsto \sin(\frac{\pi}{x.L}) \times \frac{-m_e}{q_e}$.\\
 Soit en discrétisant et en utilisant la méthode d'Euler explicite :
 $$
 \left \{
@@ -63,4 +69,22 @@ $$
 	\end{array}
 \right.
 $$
+\subsubsection*{Avec un champs électrique discrétisé}
+Dans les deux cas précédent, le champs électrique était donné par une fonction. De ce fait, on pouvait savoir la valeur du champs électrique en n'importe quelle position.\\
+Cependant, le champs électrique d'un plasma étant auto-consistant, il se modifie à chaque pas de temps, en fonction du mouvement des électrons. De ce fait il faut le calculer à chaque pas de temps, et donc le discrétisé. Cela implique que le champs électrique est une liste finie de valeurs.\\
+\\
+Le calcul de la force électrique auquelle est soumise un électron ce fait donc de la façon suivante.\\
+Notons $E_{elec}$ la force électrique exercée sur un électron. A un $t$ instant, l'électron se trouve à une position que nous noterons $x_0$. Etant donné que le champs électrique est une liste finie de valeurs, dans la majorité des cas, nous ne connaissons pas la valeur du champs électrique au point $x_0$.\\
+On a $\lfloor x_0 \rfloor \leq x_0 < \lfloor x_0 \rfloor + 1$. Nous considérons donc qu'un électron à la position $x_0$ est soumis aux champs électrique des points $\lfloor x_0 \rfloor$ et $\lfloor x_0 \rfloor + 1$, car nous connaissons la valeur du champs électrique en ces deux points.\\
+La dernière étape consiste a pondéré le poids de chacun de ces deux champs électrique. Plus l'électron est proche de $\lfloor x_0 \rfloor$, plus le champs électrique en ce point a de l'influence. De même pour $\lfloor x_0 \rfloor + 1$.\\
+D'où au final, en prenant $\alpha = \lfloor x_0 \rfloor + 1 - x_0$ : $$E_{elec} = (1 - \alpha) \times E_{\lfloor x_0 \rfloor} + \alpha \times E_{\lfloor x_0 \rfloor + 1}$$
+Le graphique ci-dessous représente un exemple de discrétisation du champs électrique.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[nodes near coords, point meta=explicit symbolic, grid=major, xmin=0, xmax=12, ymin=0, ymax=12, extra x ticks={6,6.5,7}, extra x tick labels={,$x_0$,7}, extra x tick style={grid=major}]
+\addplot+[only marks] coordinates{(0,1)[$E_0$] (1,4.1)[$E_1$] (2,6.9)[$E_2$] (3,9.1)[$E_3$] (4,10.5)[$E_4$] (5,11)[$E_5$] (6,10.5)[$E_6$] (7,9.1)[$E_7$] (8,6.9)[$E_8$] (9,4.1)[$E_9$] (10,1)[$E_{10}$]};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+On observe qu'un électron à la position $x_0$ subira une force électrique $E_{elec} = (\alpha - 1) \times E_6 + \alpha \times E_6$.
 \end{document}
