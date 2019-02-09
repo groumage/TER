@@ -50,4 +50,4 @@ def particule_anime_euler_explicite(dt, N, L, nb_particules):
 			
 		plt.pause(0.001)
 
-particule_anime_euler_explicite(1,1000,100,1)
+particule_anime_euler_explicite(1,1000,100,100)
