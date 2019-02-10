@@ -4,10 +4,6 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{amsfonts}
-\newcommand*\GnuplotDefs{
-    Binv(p,q)=exp(lgamma(p+q)-lgamma(p)-lgamma(q));
-    beta(x,p,q)=p<=0||q<=0?1/0:x<0||x>1?0.0:Binv(p,q)*x**(p-1.0)*(1.0-x)**(q-1.0);
-}
 \title{Simulation Numérique de l'amortissement Landau dans les plasmas}
 \date{2019}
 \author{Yassine MOUFTAH\\Guillaume ROUMAGE}
@@ -105,7 +101,7 @@ Considérons une variable aléatoire $X$ dont la fonction de densité est donné
 \end{axis}
 \end{tikzpicture}
 \end{center}
-Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectangle. Ce rectangle correspond à la densité d'une loi uniforme $u$, augmenté d'un facteur $c$.
+Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectangle. Ce rectangle correspond à la densité d'une loi uniforme $u$, augmenté d'un facteur $c$. Dans notre exemple, comme la $f$ est définie sur $[0;1]$, on a $c = f(1)$. De manière générale, si $f$ est définie sur $[a;b]$, on a $c = max_{x \in [a;b]} f(x)$.
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$ inscrite dans un rectangle}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
@@ -123,9 +119,10 @@ Cela fait, il faut générer des valeurs issues de la densité de $u$ et d'en ac
 \end{enumerate}
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$ inscrite dans un rectangle}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
+\begin{axis}[title={\textit{Représentation des points acceptés et rejetés en utilisant la méthode d'acceptation-rejet}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
 \addplot+[mark=none] expression[domain=0:1]{x^2+x+1/6};
-\addplot+[only marks, mark=x, red] coordinates{(0.5,1.2) (0.2,0.8) (0.3,1.5) (0.15,1.2) (0.55,1.8) (0.7,2)};
+\addplot+[only marks, mark=x, red] coordinates{(0.5,1.2) (0.2,0.8) (0.3,1.5) (0.15,1.2) (0.55,1.8) (0.7,2) (0.3,1)};
+\addplot+[only marks, mark=x, green] coordinates{(0.6,0.5) (0.8,0.8) (0.17,0.1) (0.73,1.2) (0.63,0.6) (0.7,1.3) (0.3,0.3) (0.5,0.6)};
 \draw[draw=orange] (0,0) -- (1000,0) -- (1000,217) -- (0,217) -- cycle;
 \end{axis}
 \end{tikzpicture}
