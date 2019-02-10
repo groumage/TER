@@ -107,3 +107,4 @@ venv.bak/
 rapport_ter/*
 !rapport_ter/rapport_ter.pdf
 !rapport_ter/rapport_ter.tex
+src/yassine

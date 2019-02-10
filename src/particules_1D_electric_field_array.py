@@ -16,7 +16,38 @@ def calc_vit(nb_particules, pos, L):
 		vit[i] = (-qe/me)*electric_field(pos[i],L)
 	return vit
 
-def particule_anime_euler_explicite(dt, N, L, nb_particules):
+# faire avec euler symplectique
+def particules_euler_explicite(dt, N, L, nb_particules):
+	length = (int)(math.floor(N/dt))
+	pos = zeros((length, nb_particules))
+	vit = zeros((length, nb_particules))
+
+	for i in range(nb_particules):
+		pos[0,i] = random.randint(0,L)
+
+	for i in range(nb_particules):
+		vit[0,i] = random.uniform(0.1,1)
+
+	pos_old = pos[0]
+	vit_old = vit[0]
+	fig = plt.figure('particules_1D')
+	ax = fig.add_subplot(111)
+
+	for i in range(length):
+		pos_next = (pos_old + dt * vit_old) % L
+		vit_next = calc_vit(nb_particules,pos_old,L)
+		pos[i] = pos_next
+		vit[i] = vit_next
+		pos_old = pos_next
+		vit_old = vit_next
+
+	for i in range(nb_particules):
+		p = pos[:length,i]
+		v = vit[:length,i]	
+		plt.plot(p, v, '-')
+	plt.show()
+
+def particules_anime_euler_explicite(dt, N, L, nb_particules):
 	pos_old = zeros(nb_particules)
 	for i in range(nb_particules):
 		pos_old[i] = random.randint(0,L)
@@ -51,4 +82,5 @@ def particule_anime_euler_explicite(dt, N, L, nb_particules):
 
 		plt.pause(0.001)
 
-particule_anime_euler_explicite(1,1000,100,1)
+particules_euler_explicite(1,200,100,10)
+#particules_anime_euler_explicite(1,200,100,10)

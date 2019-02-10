@@ -12,21 +12,25 @@
 \newpage
 \noindent Dans tout le document, les problèmes seront étudiés sur un intervalle de temps noté $[0;T]$, avec $T \in ]0; + \infty[$. Pour discrétiser le problème afin de faire des simulations numériques, on choisit un nombre de pas $N$. L'intervalle $[0;T]$ est subdivisé en $N$ sous-intervalles. Le pas de temps, représenté par $h$, est alors donné par la formule : $h = \frac{T}{N}$.
 \newpage
-\section*{Introduction}
+\section{Introduction}
+\section{Plasma : définition, intérêts scientifiques et industriels}
 Il est courant de dire que la matière possède trois états : l'état solide, l'état liquide, ainsi que l'état gazeux. Mais en réalité, il existe un quatrième état de la matière : c'est le plasma.\\
-Comme nous le savons, les atomes sont composés d'un noyau, contenant des protons et des neutrons, autour duquel gravitent des électrons. A l'état solide, liquide ou gazeux, les électrons qui orbitent autour des atomes restent sur leurs orbites. Lorsque de la matière est chauffé, elle passe successivement de l'état solide à l'état liquide, puis de l'état liquide à l'état gazeux. Lorsque le gaz est chauffé à très haute température (supérieure à $10^4$ K), il devient un plasma.\\
+Comme nous le savons, les atomes sont composés d'un noyau, contenant des protons et des neutrons, autour duquel gravitent des électrons. A l'état solide, liquide ou gazeux, les électrons qui orbitent autour des atomes restent sur leurs orbites. Lorsque de la matière est chauffé, elle passe successivement de l'état solide à l'état liquide, puis de l'état liquide à l'état gazeux. Lorsque le gaz est chauffé à très haute température (supérieure à $10^4$ K), une partie de ce gaz devient un plasma.\\
 Cette haute température libèrent les électrons des l'orbites de l'atome auquel ils étaient rattaché, qui peuvent désormais se déplacer dans le gaz. Celui-ci devient alors un mélange d'électrons et d'ions positifs.\\
 \\
-L'analyse numérique permet de reproduire par le calcul une réalité physique. Cette simulation peut être effectuée pour plusieurs raisons : l'expérience peut-être irréalisable, avoir un coût trop élevé, ou encore pour prévoir grâce aux ordinateurs comment l'expérience va se dérouler, avant de faire cette même expérience en laboratoire, en conditions réelles.
+L'analyse numérique permet de reproduire par le calcul une réalité physique. Cette simulation peut être effectuée pour plusieurs raisons : l'expérience peut-être irréalisable, avoir un coût trop élevé, ou encore pour prévoir grâce aux ordinateurs comment l'expérience va se dérouler, avant de faire cette même expérience en laboratoire, en conditions réelles.\\
+L'analyse numérique permet aussi de vérifier l'exactitude des modèles théoriques sous-jacents, et dégager le modèle qui peut modéliser au mieux les phénomènes physiques observés. Le schéma numérique lui-même doit être bien adapté au modèle. C'est pour cela qu'il y a différent types de méthodes numérique.
+\section{Description des modèles théoriques utilisés}
+\section{Description des méthodes numériques utilisés}
+\section{Travail réalisé}
 \subsection*{Constantes}
 \begin{itemize}
 \item Valeur d'une charge élémentaire : $e = 1.6021766208.10^{-19} C$.
 \item Charge élémentaire d'un électron : $q_e = -e = -1.6021766208.10^{-19} C$.
 \item Masse d'un électron : $m_e = 9.109.10^{-31} kg$.
 \end{itemize}
-\section*{Simulation de mouvements de particules}
-\subsection*{Mouvement de particules en 1D}
-Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Lors de la simulationn, si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons. En effet, les mouvements des ions sont négligeables devant ceux des électrons. Nous considérerons donc les ions comme fixes.
+\subsection*{Simulation de mouvements de particules en 1D}
+Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Lors de la simulation, si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons. En effet, les mouvements des ions sont négligeables devant ceux des électrons. Nous considérerons donc les ions comme fixes.
 \subsubsection*{Avec un champs électrique nul}
 Les équations donnant la position et la vitesse des électrons sont données par les systèmes suivants. Tout d'abord, en faisant l'hypothèse que le champs électrique auquel est soumis l'électron est nul.
 $$
@@ -48,8 +52,8 @@ $$
 \right.
 $$
 avec $n \in \{0,...,N-1\}$.\\
-\subsubsection*{Avec un champs électrique constant}
-Ajoutons maintenant un champ électrique constant. Les équations décrivant la position et la vitesse des électrons sont données par :
+\subsubsection*{Avec un champs électrique stationnaire}
+Ajoutons maintenant un champ électrique stationnaire, c'est-à-dire qui ne dépend pas du temps. Les équations décrivant la position et la vitesse des électrons sont données par :
 $$
 \left \{
    \begin{array}{l l l}
@@ -60,18 +64,20 @@ $$
 $$
 avec $t \in [0;T]$, $m_e$ la masse d'un électron, $q_e$ la valeur de la charge élémentaire de l'électron, $E_0$ la fonction représentant la valeur du champ électrique en fonction de la position.\\
 Dans la simulation, la fonction $E_0$ utilisée est $E_0 : x \mapsto \sin(\frac{\pi}{x.L}) \times \frac{-m_e}{q_e}$.\\
-Soit en discrétisant et en utilisant la méthode d'Euler explicite :
+\textbf{Justifier la multiplication par $\frac{-m_e}{q_e}$}\\
+Soit en discrétisant et en utilisant la méthode d'Euler implicite :
 $$
 \left \{
    \begin{array}{l l l}
       x_{n+1}  & = & x_n + h.v_n \\
-      v_{n+1}  & = & -\frac{q_e}{m_e}.E_0(x_n) \\
+      v_{n+1}  & = & -\frac{q_e}{m_e}.E_0(x_{n+1}) \\
 	\end{array}
 \right.
 $$
 \subsubsection*{Avec un champs électrique discrétisé}
 Dans les deux cas précédent, le champs électrique était donné par une fonction. De ce fait, on pouvait savoir la valeur du champs électrique en n'importe quelle position.\\
-Cependant, le champs électrique d'un plasma étant auto-consistant, il se modifie à chaque pas de temps, en fonction du mouvement des électrons. De ce fait il faut le calculer à chaque pas de temps, et donc le discrétisé. Cela implique que le champs électrique est une liste finie de valeurs.\\
+Plus préçisément, il y a généralement deux champs électrique. Le champs électrique extérieur, et celui créé par les particules, qui est auto-consistant. Il se modifie donc à chaque pas de temps, en fonction du mouvement des électrons. De ce fait il faut le calculer à chaque pas de temps, et donc le discrétisé. Cela implique que le champs électrique est une liste finie de valeurs.\\
+Pour simplifier la modélisation, nous considérons qu'un seul et unique champs électrique agit.\\
 \\
 Le calcul de la force électrique auquelle est soumise un électron ce fait donc de la façon suivante.\\
 Notons $E_{elec}$ la force électrique exercée sur un électron. A un $t$ instant, l'électron se trouve à une position que nous noterons $x_0$. Etant donné que le champs électrique est une liste finie de valeurs, dans la majorité des cas, nous ne connaissons pas la valeur du champs électrique au point $x_0$.\\
@@ -93,7 +99,7 @@ Le graphique ci-dessous représente un exemple de discrétisation du champs éle
 On observe qu'un électron à la position $x_0$ subira une force électrique $E_{elec} = (1 - \alpha) \times E_6 + \alpha \times E_7$.
 \subsubsection*{Méthode d'acceptation-rejet}
 La méthode d'acceptation-rejet est une méthode permettant de simuler une loi de probabilité de densité $f$ lorsqu'il est compliqué de simuler directement cette densité. Nous expliquons ci-après le fonctionnement de la méthode d'acceptation-rejet.\\
-Considérons une variable aléatoire $X$ dont la fonction de densité est donné par : $f_X(x) = (x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$.
+Considérons par exemple une variable aléatoire $X$ dont la fonction de densité $f_X$ est donnée par : $f_X(x) = (x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$.
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0]
@@ -101,7 +107,7 @@ Considérons une variable aléatoire $X$ dont la fonction de densité est donné
 \end{axis}
 \end{tikzpicture}
 \end{center}
-Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectangle. Ce rectangle correspond à la densité d'une loi uniforme $u$, augmenté d'un facteur $c$. Dans notre exemple, comme la $f$ est définie sur $[0;1]$, on a $c = f(1)$. De manière générale, si $f$ est définie sur $[a;b]$, on a $c = max_{x \in [a;b]} f(x)$.
+Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectangle. Ce rectangle correspond à la densité d'une loi uniforme $u$, augmenté d'un facteur $c$. Dans notre exemple, comme la $f_X$ est définie sur $[0;1]$, on a $c = f(1)$. De manière générale, si $f_X$ est définie sur $[a;b]$, on a $c = max_{x \in [a;b]} f_X(x)$.
 \begin{center}
 \begin{tikzpicture}
 \begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$ inscrite dans un rectangle}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
@@ -110,11 +116,11 @@ Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectang
 \end{axis}
 \end{tikzpicture}
 \end{center}
-Cela fait, il faut générer des valeurs issues de la densité de $u$ et d'en accepter seulement une partie, de sorte que les valeurs retenus semblent provenir de la densité de $X$. On applique ensutie l'algorithme suivant :
+Cela fait, il faut générer des valeurs issues de la densité de $u$, et en accepter seulement une partie, de sorte que les valeurs retenus semblent provenir de la densité de $X$. On applique ensutie l'algorithme suivant :
 \begin{enumerate}
-\item On prend une valeur $\alpha$ sur $[0;1]$, obtenue de la loi uniforme.
-\item On prend une valeur $\beta$ sur $[0;c.u(x)]$ obtenue de la loi uniforme et multiplié par le facteur c.
-\item On positionne cette valeur sur le graphique de la densité de $f$. Si le point $(\alpha, \beta)$ se situe sous la courbe, c'est-à-dire si $\beta \leq f_X(\alpha)$, alors la valeur est acceptée. Sinon, elle est refusée.
+\item On prend une valeur $\alpha$ sur $[0;1]$, obtenue de la loi uniforme sur $[0;1]$.
+\item On prend une valeur $\beta$ sur $[0;c.u(x)]$ obtenue de la loi uniforme sur $[0;1]$ et multiplié par le facteur $c$.
+\item On positionne cette valeur sur le graphique de la densité de $X$. Si le point $(\alpha; \beta)$ se situe sous la courbe de $f_X$, c'est-à-dire si $\beta \leq f_X(\alpha)$, alors la valeur est acceptée. Sinon, elle est refusée.
 \item Reprendre à l'étape 1 autant de fois que necessaire pour avoir le nombre de points suffisant.
 \end{enumerate}
 \begin{center}
@@ -127,4 +133,6 @@ Cela fait, il faut générer des valeurs issues de la densité de $u$ et d'en ac
 \end{axis}
 \end{tikzpicture}
 \end{center}
+La méthode d'acceptation-rejet peut-être utilisé pour simuler n'importe qu'elle variable aléatoire $X$ de densité de probabilité $f_X$, tant que $f_X$ peut-être borné par une autre densité $g_Y$ à un facteur multiplicatif près, et que le support de $f_X$ est finie.
+\section{Conclusion}
 \end{document}
