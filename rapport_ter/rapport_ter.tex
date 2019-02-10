@@ -3,7 +3,11 @@
 \usepackage{fullpage}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usepackage{comment}
+\usepackage{amsfonts}
+\newcommand*\GnuplotDefs{
+    Binv(p,q)=exp(lgamma(p+q)-lgamma(p)-lgamma(q));
+    beta(x,p,q)=p<=0||q<=0?1/0:x<0||x>1?0.0:Binv(p,q)*x**(p-1.0)*(1.0-x)**(q-1.0);
+}
 \title{Simulation Numérique de l'amortissement Landau dans les plasmas}
 \date{2019}
 \author{Yassine MOUFTAH\\Guillaume ROUMAGE}
@@ -81,10 +85,49 @@ D'où au final, en prenant $\alpha = \lfloor x_0 \rfloor + 1 - x_0$ : $$E_{elec}
 Le graphique ci-dessous représente un exemple de discrétisation du champs électrique.
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[nodes near coords, point meta=explicit symbolic, grid=major, xmin=0, xmax=12, ymin=0, ymax=12, extra x ticks={6,6.5,7}, extra x tick labels={,$x_0$,7}, extra x tick style={grid=major}]
-\addplot+[only marks] coordinates{(0,1)[$E_0$] (1,4.1)[$E_1$] (2,6.9)[$E_2$] (3,9.1)[$E_3$] (4,10.5)[$E_4$] (5,11)[$E_5$] (6,10.5)[$E_6$] (7,9.1)[$E_7$] (8,6.9)[$E_8$] (9,4.1)[$E_9$] (10,1)[$E_{10}$]};
+\begin{axis}[nodes near coords, point meta=explicit symbolic, grid=major, xmin=0, xmax=12, ymin=0, ymax=12, extra x ticks={6,6.5,7}, extra x tick labels={,$x_0$,7}, extra x tick style={grid=major}, title={Exemple de discrétisation du champs électrique}]
+\addplot+[only marks, mark=x] coordinates{(0,1)[$E_0$] (1,4.1)[$E_1$] (2,6.9)[$E_2$] (3,9.1)[$E_3$] (4,10.5)[$E_4$] (5,11)[$E_5$] (6,10.5)[$E_6$] (7,9.1)[$E_7$] (8,6.9)[$E_8$] (9,4.1)[$E_9$] (10,1)[$E_{10}$]};
+\draw[<->] (60,40) -- (65,40);
+\draw (62.5,35) node{$\alpha$};
+\draw[<->] (65,40) -- (70,40);
+\draw (67.5,45) node{$1 - \alpha$};
 \end{axis}
 \end{tikzpicture}
 \end{center}
-On observe qu'un électron à la position $x_0$ subira une force électrique $E_{elec} = (\alpha - 1) \times E_6 + \alpha \times E_6$.
+On observe qu'un électron à la position $x_0$ subira une force électrique $E_{elec} = (1 - \alpha) \times E_6 + \alpha \times E_7$.
+\subsubsection*{Méthode d'acceptation-rejet}
+La méthode d'acceptation-rejet est une méthode permettant de simuler une loi de probabilité de densité $f$ lorsqu'il est compliqué de simuler directement cette densité. Nous expliquons ci-après le fonctionnement de la méthode d'acceptation-rejet.\\
+Considérons une variable aléatoire $X$ dont la fonction de densité est donné par : $f_X(x) = (x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0]
+\addplot+[mark=none] expression[domain=0:1]{x^2+x+1/6};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+Le support de la loi de $X$ est finie, donc peut donc l'inscrire dans un rectangle. Ce rectangle correspond à la densité d'une loi uniforme $u$, augmenté d'un facteur $c$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$ inscrite dans un rectangle}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
+\addplot+[mark=none] expression[domain=0:1]{x^2+x+1/6};
+\draw[draw=orange] (0,0) -- (1000,0) -- (1000,217) -- (0,217) -- cycle;
+\end{axis}
+\end{tikzpicture}
+\end{center}
+Cela fait, il faut générer des valeurs issues de la densité de $u$ et d'en accepter seulement une partie, de sorte que les valeurs retenus semblent provenir de la densité de $X$. On applique ensutie l'algorithme suivant :
+\begin{enumerate}
+\item On prend une valeur $\alpha$ sur $[0;1]$, obtenue de la loi uniforme.
+\item On prend une valeur $\beta$ sur $[0;c.u(x)]$ obtenue de la loi uniforme et multiplié par le facteur c.
+\item On positionne cette valeur sur le graphique de la densité de $f$. Si le point $(\alpha, \beta)$ se situe sous la courbe, c'est-à-dire si $\beta \leq f_X(\alpha)$, alors la valeur est acceptée. Sinon, elle est refusée.
+\item Reprendre à l'étape 1 autant de fois que necessaire pour avoir le nombre de points suffisant.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[title={\textit{Fonction de densité de $(x^2 + x + \frac{1}{6}) \times \mathbf{1}_{[0;1]}(x)$ inscrite dans un rectangle}}, extra x ticks={0,1}, extra x tick labels={,}, extra x tick style={grid=major}, ymin=0, extra y ticks={2.17}, extra y tick labels={$c.u(x)$}, extra y tick style={grid=major}]
+\addplot+[mark=none] expression[domain=0:1]{x^2+x+1/6};
+\addplot+[only marks, mark=x, red] coordinates{(0.5,1.2) (0.2,0.8) (0.3,1.5) (0.15,1.2) (0.55,1.8) (0.7,2)};
+\draw[draw=orange] (0,0) -- (1000,0) -- (1000,217) -- (0,217) -- cycle;
+\end{axis}
+\end{tikzpicture}
+\end{center}
 \end{document}
