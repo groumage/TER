@@ -30,7 +30,7 @@ L'analyse numérique permet aussi de vérifier l'exactitude des modèles théori
 \item Masse d'un électron : $m_e = 9.109.10^{-31} kg$.
 \end{itemize}
 \subsection*{Simulation de mouvements de particules en 1D}
-Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Lors de la simulation, si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule reste dans l'intervale d'espace étudié. Les particules étudiées seront les électrons. En effet, les mouvements des ions sont négligeables devant ceux des électrons. Nous considérerons donc les ions comme fixes.
+Nous simulons en premier lieu le mouvement d'une, puis de plusieurs particules en une dimension, c'est-à-dire sur un segment défini. Lors de la simulation, si la particule atteint le bord droit du segment, elle est envoyée sur le bord gauche, et inversement. Cela permet à la particule de rester dans l'intervale d'espace étudié. Les particules étudiées seront les électrons. En effet, les mouvements des ions sont négligeables devant ceux des électrons. Nous considérerons donc les ions comme fixes.
 \subsubsection*{Avec un champs électrique nul}
 Les équations donnant la position et la vitesse des électrons sont données par les systèmes suivants. Tout d'abord, en faisant l'hypothèse que le champs électrique auquel est soumis l'électron est nul.
 $$
@@ -64,16 +64,27 @@ $$
 $$
 avec $t \in [0;T]$, $m_e$ la masse d'un électron, $q_e$ la valeur de la charge élémentaire de l'électron, $E_0$ la fonction représentant la valeur du champ électrique en fonction de la position.\\
 Dans la simulation, la fonction $E_0$ utilisée est $E_0 : x \mapsto \sin(\frac{\pi}{x.L}) \times \frac{-m_e}{q_e}$.\\
-\textbf{Justifier la multiplication par $\frac{-m_e}{q_e}$}\\
-Soit en discrétisant et en utilisant la méthode d'Euler implicite :
+\textcolor{red}{Justifier la multiplication par $\frac{-m_e}{q_e}$}\\
+\textcolor{red}{Expression de $v_{n+1}$}\\
+Soit en discrétisant et en utilisant la méthode d'Euler explicitee :
 $$
 \left \{
    \begin{array}{l l l}
       x_{n+1}  & = & x_n + h.v_n \\
-      v_{n+1}  & = & -\frac{q_e}{m_e}.E_0(x_{n+1}) \\
+      v_{n+1}  & = & v_n - h.\frac{q_e}{m_e}.E_0(x_n) \\
 	\end{array}
 \right.
 $$
+Nous pouvons aussi effectué une discrétisation en utilisant la méthode d'Euler symplectique :
+$$
+\left \{
+   \begin{array}{l l l}
+      x_{n+1}  & = & x_n + h.v_n \\
+      v_{n+1}  & = & v_n - h.\frac{q_e}{m_e}.E_0(x_{n+1}) \\
+	\end{array}
+\right.
+$$
+\textcolor{red}{Trouver une bonne fonction pour $E_0$ pour faire une comparaison de l'espace des phases entre euler implicite et euler explicite}\\
 \subsubsection*{Avec un champs électrique discrétisé}
 Dans les deux cas précédent, le champs électrique était donné par une fonction. De ce fait, on pouvait savoir la valeur du champs électrique en n'importe quelle position.\\
 Plus préçisément, il y a généralement deux champs électrique. Le champs électrique extérieur, et celui créé par les particules, qui est auto-consistant. Il se modifie donc à chaque pas de temps, en fonction du mouvement des électrons. De ce fait il faut le calculer à chaque pas de temps, et donc le discrétisé. Cela implique que le champs électrique est une liste finie de valeurs.\\

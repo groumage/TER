@@ -6,7 +6,7 @@ from numpy import *
 
 # la fonction de densite utilise est f(x)=x*x+x+1/6 sur [0;1]
 def densite(x):
-	return float((x*x)+x+1/6)	
+	return float((x*x)+x+1/6)
 
 def uniforme(a,b):
 	return (a+(b-a)*random.random())
@@ -14,11 +14,11 @@ def uniforme(a,b):
 def tirage():
 	x = []
 	y = []
-	for i in range(100000):
+	for i in range(1000):
 		alpha = uniforme(0,1)
 		c = densite(1)
 		beta = uniforme(0,1) * c
-		if (beta < densite(alpha)):
+		if (beta <= densite(alpha)):
 			x.append(alpha)
 			y.append(beta)
 	X = linspace(0,1,len(x))
