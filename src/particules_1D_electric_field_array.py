@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
-from numpy import *
+import numpy as np
+import random as random
 
 q = 1.6021766208e-19
 qe = -q
@@ -8,11 +9,11 @@ me = 9.109e-31
 # renvoie la valeur du champs electrique au point x, prenant en parametre la longueur su segment L
 # fonction utilisee : E_0(x) = sin(2*pi*x/L)*(me/qe)
 def electric_field(x,L):
-	return sin((2*pi/L)*x)*(me/qe)
+	return np.sin((2*np.pi/L)*x)*(me/qe)
 
 # renvoie le vecteur contenant les nouvelle vitesse des particules
 def calc_vit (h, nbr_particules, pos_old, vit_old, L):
-	vit_new = zeros(nbr_particules)
+	vit_new = np.zeros(nbr_particules)
 	for i in range(nbr_particules):
 		vit_new[i] = vit_old[i] - h*(qe/me)*electric_field(pos_old[i],L)
 	return vit_new
@@ -20,8 +21,8 @@ def calc_vit (h, nbr_particules, pos_old, vit_old, L):
 # affiche l'espace des phases des particules en faisant les calculs par la methode d'euler explicite
 def phases_euler_explicite(T, N, L, nbr_particules):
 	h = T/N
-	pos = zeros((N, nbr_particules))
-	vit = zeros((N, nbr_particules))
+	pos = np.zeros((N, nbr_particules))
+	vit = np.zeros((N, nbr_particules))
 
 	for i in range(nbr_particules):
 		pos[0,i] = random.randint(0,L)

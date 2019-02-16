@@ -4,11 +4,11 @@ from numpy import *
 q = 1.6021766208e-19
 qe = -q
 me = 9.109e-31
-coeff = 10**1
+
 # renvoie la valeur du champs electrique au point x, prenant en parametre la longueur su segment L
 # fonction utilisee : E_0(x) = sin(2*pi*x/L)*(me/qe)
 def electric_field(x,L):
-	return sin((2*pi/L)*x)*(me/qe)*coeff
+	return sin((2*pi/L)*x)*(me/qe)
 
 # renvoie le vecteur contenant les nouvelle vitesse des particules
 def calc_vit (h, nbr_particules, pos_old, vit_old, L):
@@ -326,7 +326,7 @@ def compare_symplectique_pond(T, N, L, I, nbr_particules):
 	field = zeros(I+1)
 	for i in range(I+1):
 		# formule a ameliorer : on peut certainement la simplifier
-		field[i] = sin(((2*pi)/L)*i*(L/I)) * (me/qe) * coeff
+		field[i] = sin(((2*pi)/L)*i*(L/I)) * (me/qe)
 		#print("L:"+str(L)+"   i:"+str(i*(L/I)))
 	# la derniere valeur duc champs est saisie a la main car si on calcule sin(2*pi) on ne trouve pas 0
 	# je pense que c'est du a une trop faible precision de calcul
@@ -354,7 +354,7 @@ def compare_symplectique_pond(T, N, L, I, nbr_particules):
 	field = zeros(I*10+1)
 	for i in range(I*10+1):
 		# formule a ameliorer : on peut certainement la simplifier
-		field[i] = sin(((2*pi)/L)*i*(L/(I*10))) * (me/qe) * coeff
+		field[i] = sin(((2*pi)/L)*i*(L/(I*10))) * (me/qe)
 		#print("L:"+str(L)+"   i:"+str(i*(L/(I*10))))
 	# la derniere valeur duc champs est saisie a la main car si on calcule sin(2*pi) on ne trouve pas 0
 	# je pense que c'est du a une trop faible precision de calcul
