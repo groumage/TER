@@ -168,8 +168,9 @@ Cela fait, il faut générer des valeurs issues de la densité de $u$, et en acc
 \end{axis}
 \end{tikzpicture}
 \end{center}
-La méthode d'acceptation-rejet peut-être utilisé pour simuler n'importe qu'elle variable aléatoire $X$ de densité de probabilité $f_X$, tant que $f_X$ peut-être borné par une autre densité $g_Y$ à un facteur multiplicatif près, et que le support de $f_X$ est de la forme $[a;b]$ avec $a,b \in \mathbb{R}$ et $a < b$.\\
-\textcolor{red}{Parler des performance algorithmique pour générer le nuage de points}
+La méthode d'acceptation-rejet peut-être utilisé pour simuler n'importe qu'elle variable aléatoire $X$ de densité de probabilité $f_X$, tant que $f_X$ peut-être borné par une autre densité $g_Y$ à un facteur multiplicatif près, et que le support de $f_X$ est de la forme $[a;b]$ avec $a,b \in \mathbb{R}$ et $a < b$.
+\paragraph{Comparaison de performances}
+\textcolor{red}{Parler des performance algorithmique}
 \subsubsection{Densité à partir d'un nuage de points}
 Dans la sous-sous-section \ref{sssec:acceptationRejet}, nous avons vu comment constitué un nuage de points correspondant à une densité. Ici, nous allons étudié comment faire le processus inverse : constitué une densité correspondant à un nuage de points.\\
 Pour cela, on considère un nuage de points sur un intervalle $[a;b]$ avec $a,b \in \mathbb{R}$ et $a < b$. L'algorithme à appliquer est le suivant :
@@ -177,6 +178,8 @@ Pour cela, on considère un nuage de points sur un intervalle $[a;b]$ avec $a,b 
 \item Discrétiser $[a;b]$ en $N$ sous-intervalles noté $[a_i; b_i]$ pour $i \in \{0,...,N\}$. On a donc $a_j = b_{j+1}$ pour $j \in \{1,...,N-2\}$.
 \item Compter le nombre de particules dans chaque intervalles $[a_i, b_i]$, que nous notons $n_{p,i}$. Le nombre de particules aux points $a_0, a_1, ...,a_{N-1}$ sont respectivement $n_{p,0}, n_{p,1}, ..., n_{p,N-1}$.
 \item Pour avoir le nombre de particules en $a_N$, nous appliquons la méthode suivante : on compte le nombre de particules dans l'intervalle $[\frac {a_{N-1} + a_N} {2}; a_N]$ que nous multiplions par 2. En effet, étant donné que le point $a_{N+1}$ n'existe pas, nous ne pouvons pas appliquer la même méthode que precedemment.
+\paragraph{Comparaison de performances}
+\textcolor{red}{Parler des performance algorithmique}
 \end{enumerate}
 \section{Conclusion}
 \end{document}
