@@ -11,7 +11,7 @@ L = 100
 params = {'mathtext.default': 'regular' }
 plt.rcParams.update(params)
 
-plt.title("Représentation de la fonction $E_0$ sur [0;+" + str(L) + "]")
+plt.title("Représentation de la fonction $E_0$ sur [0;+" + str(L) + "]",style='italic')
 plt.ylabel('Champs électrique')
 plt.xlabel('Position')
 

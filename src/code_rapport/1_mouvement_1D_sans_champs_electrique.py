@@ -26,7 +26,7 @@ for i in range(1,N):
 	pos_old = pos_next
 
 fig = plt.figure('Simulation')
-fig.suptitle('Mouvements de ' + str(nbr_particules) + ' particules en 1D sans champs électrique \n(T=' + str(T) + ', N=' + str(N) + ', L=' + str(L) + ')')
+fig.suptitle('Mouvements de ' + str(nbr_particules) + ' particules en 1D sans champs électrique \n(T=' + str(T) + ', N=' + str(N) + ', L=' + str(L) + ')',style='italic')
 
 ax = fig.add_subplot(121)
 plt.ylabel('Vitesse')

@@ -28,8 +28,12 @@ for i in range(nbr_particules):
 	mem_pos_ini[i] = pos[0,i]
 	mem_vit_ini[i] = vit[0,i]
 
-fig = plt.figure('particules_1D')
+fig = plt.figure('Simulation')
+fig.suptitle("Discrétisation du champs électrique\navec " + str(nbr_particules) + ' particules (T=' + str(T) + ', N=' + str(N) + ', L=' + str(L) + ')',style='italic')
 ax = fig.add_subplot(131)
+plt.title("I=" + str(I))
+plt.ylabel('Vitesse')
+plt.xlabel('Position')
 pos_old = pos[0]
 vit_old = vit[0]
 field = np.zeros(I+1)
@@ -57,6 +61,9 @@ for i in range(nbr_particules):
 	plt.plot(p, v, '-')
 
 ax = fig.add_subplot(132)
+plt.title("I=" + str(I*10))
+plt.ylabel('Vitesse')
+plt.xlabel('Position')
 pos = np.zeros((N, nbr_particules))
 vit = np.zeros((N, nbr_particules))
 for i in range(nbr_particules):
@@ -90,6 +97,9 @@ for i in range(nbr_particules):
 	plt.plot(p, v, '-')
 
 ax = fig.add_subplot(133)
+plt.title("Champs continue")
+plt.ylabel('Vitesse')
+plt.xlabel('Position')
 pos = np.zeros((N, nbr_particules))
 vit = np.zeros((N, nbr_particules))
 for i in range(nbr_particules):
@@ -111,6 +121,7 @@ for i in range(nbr_particules):
 	v = vit[:N,i]	
 	plt.plot(p, v, '-')
 
+plt.subplots_adjust(top=0.8,wspace=0.6)
 plt.show()
 
 

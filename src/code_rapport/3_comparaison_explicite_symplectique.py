@@ -23,7 +23,7 @@ for i in range(nbr_particules):
 pos_old = pos[0]
 vit_old = vit[0]
 fig = plt.figure('Espace des phases')
-fig.suptitle("Comparaison d'euler explicite et euler symplectique\navec " + str(nbr_particules) + ' particules en 1D avec champs électrique\n(T=' + str(T) + ', N=' + str(N) + ', L=' + str(L) + ')')
+fig.suptitle("Comparaison d'euler explicite et euler symplectique\navec " + str(nbr_particules) + ' particules en 1D avec champs électrique\n(T=' + str(T) + ', N=' + str(N) + ', L=' + str(L) + ')',style='italic')
 
 ax = fig.add_subplot(121)
 plt.ylabel('Vitesse')
